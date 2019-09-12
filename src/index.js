@@ -4,11 +4,46 @@ import fetch from 'node-fetch'
 
 const PROETHEUS_URL = 'http://localhost:9090'
 
-const publishToAppD = async (data) => {
+
+/**
+ * Some Prometheus metrics return several values with different labels.
+ * Method adds the labels to the metric names ready for AppD
+ */
+const addLabelsToMetricNames = (metric) => {
+
+  if(typeof metric.metric.quantile !== "undefined"){
+    metric.metric.__name__ = metric.metric.__name__ + ":" + metric.metric.quantile
+  }
+
+  if(typeof metric.metric.handler !== "undefined"){
+    metric.metric.__name__ = metric.metric.__name__ + ":" + metric.metric.handler
+  }
+
+  return metric.metric.__name__
+}
+
+const appdRequest = async (data) => {
 
 }
 
+const publishToAppd = async (data) => {
+  console.log(`[starting] ${data.length} metrics to add / update...`)
+  let i = 1
+
+  for(let metric of data)
+  {
+    metric.metric.__name__ = addLabelsToMetricNames(metric)
+
+    console.log(` [${i}/${data.length}] Updating ${metric.metric.__name__}`)
+
+    i++
+  }
+
+  console.log(`[succeeded] ${data.length} metrics to added / updated`)
+}
+
 const prometheusRequest = async (query) => {
+  console.log(`[starting] '${query}' query...`)
 
   const response = await fetch(`${PROETHEUS_URL}/api/v1/query?query=${query}`, {
     method: 'GET',
@@ -29,7 +64,6 @@ const prometheusRequest = async (query) => {
 
 }
 
-
 const getDataFromPrometheus = async () => {
   let data = []
 
@@ -45,7 +79,7 @@ const getDataFromPrometheus = async () => {
 const main = async () => {
   try {
     const data = await getDataFromPrometheus()
-    await publishToAppD(data)
+    await publishToAppd(data)
 
   } catch (e) {
     console.error(e)
@@ -56,7 +90,7 @@ const main = async () => {
 // Called when running locally
 const runLocal = async () => {
   try{
-    console.log(`Starting Script...`)
+    console.log(`[starting] Starting Script...`)
     await main()
   }
   catch(e){
@@ -67,7 +101,7 @@ const runLocal = async () => {
 // Only called when running in AWS Lambda
 exports.handler = async (event, context, callback) => {
     try{
-      console.log(`Starting Script...`)
+      console.log(`[starting] Starting Script...`)
       await main()
       callback(null, 'AppDynamics updates succeeded')
     }
