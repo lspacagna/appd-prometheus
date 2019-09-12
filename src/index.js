@@ -4,6 +4,10 @@ import fetch from 'node-fetch'
 
 const PROETHEUS_URL = 'http://localhost:9090'
 
+const publishToAppD = async (data) => {
+
+}
+
 const prometheusRequest = async (query) => {
 
   const response = await fetch(`${PROETHEUS_URL}/api/v1/query?query=${query}`, {
@@ -14,7 +18,10 @@ const prometheusRequest = async (query) => {
   })
 
   if(response.ok){
-    return response.json()
+    const data = await response.json()
+
+    console.log(`[succeeded] '${query}' query. ${data.data.result.length} data points found.`)
+    return data.data.result
   }
   else{
     throw new Error(response.statusText);
@@ -24,15 +31,21 @@ const prometheusRequest = async (query) => {
 
 
 const getDataFromPrometheus = async () => {
-  const data = await prometheusRequest('prometheus_target_interval_length_seconds')
+  let data = []
 
-  console.log(data)
+  // Make Prometheus queries
+  data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
+  data.push(await prometheusRequest('prometheus_http_requests_total'))
 
+  data = _.flatten(data)
+
+  return data
 }
 
 const main = async () => {
   try {
     const data = await getDataFromPrometheus()
+    await publishToAppD(data)
 
   } catch (e) {
     console.error(e)
