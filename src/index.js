@@ -19,25 +19,38 @@ const addLabelsToMetricNames = (metric) => {
     metric.metric.__name__ = metric.metric.__name__ + ":" + metric.metric.handler
   }
 
-  return metric.metric.__name__
+  return metric
 }
 
 const appdRequest = async (data) => {
+  const requestBody = []
 
+  for(let metric of data){
+
+    /**
+    * Creating payload to be passed to AppD API.
+    * See https://docs.appdynamics.com/display/latest/Standalone+Machine+Agent+HTTP+Listener
+    * for available options.
+    */
+    const value = {
+      "metricName": `Custom Metrics|Prometheus|${metric.metric.job}|${metric.metric.__name__}`,
+      "aggregatorType": "OBSERVATION",
+      "value": metric.value[1]
+    }
+
+    requestBody.push(value)
+  }
+
+  console.log(requestBody)
 }
 
 const publishToAppd = async (data) => {
   console.log(`[starting] ${data.length} metrics to add / update...`)
-  let i = 1
 
-  for(let metric of data)
-  {
-    metric.metric.__name__ = addLabelsToMetricNames(metric)
+  // Loop through array of metrics and add the labels to the metric names
+  data.map(addLabelsToMetricNames)
 
-    console.log(` [${i}/${data.length}] Updating ${metric.metric.__name__}`)
-
-    i++
-  }
+  await appdRequest(data)
 
   console.log(`[succeeded] ${data.length} metrics to added / updated`)
 }
