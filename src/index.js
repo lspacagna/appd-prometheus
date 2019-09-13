@@ -3,8 +3,11 @@ import fs from 'async-file'
 import fetch from 'node-fetch'
 
 const PROETHEUS_URL = 'http://localhost:9090'
-const APPD_URL = ''
-
+/**
+ * URL of the HTTP listener running on your machine agent.
+ * See https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+HTTP+Listener
+ */
+const APPD_URL = 'http://localhost:8293/api/v1/metrics'
 
 /**
  * Some Prometheus metrics return several values with different labels.
@@ -66,19 +69,23 @@ const appdRequest = async (data) => {
       "value": metric.value[1]
     }
 
-    // const response = await fetch(`${PROETHEUS_URL}/api/v1/query?query=${query}`, {
-    //   method: 'GET',
-    //   headers: {
-    //     'Accept': 'application/json, text/plain, */*'
-    //   }
-    // })
-
-
-
     requestBody.push(value)
   }
 
-  console.log(requestBody)
+  const response = await fetch(APPD_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestBody)
+  })
+
+  if(await response.ok){
+    console.log(`[succeeded] ${data.length} metrics to added / updated`)
+  }
+  else{
+    throw new Error(response.statusText);
+  }
 }
 
 const publishToAppd = async (data) => {
@@ -93,8 +100,6 @@ const publishToAppd = async (data) => {
 
   // Send data to AppD
   await appdRequest(data)
-
-  console.log(`[succeeded] ${data.length} metrics to added / updated`)
 }
 
 const prometheusRequest = async (query) => {
@@ -140,7 +145,6 @@ const main = async () => {
     console.error(e)
   }
 }
-
 
 // Called when running locally
 const runLocal = async () => {
