@@ -3,6 +3,7 @@ import fs from 'async-file'
 import fetch from 'node-fetch'
 
 const PROETHEUS_URL = 'http://localhost:9090'
+const APPD_URL = ''
 
 
 /**
@@ -18,6 +19,33 @@ const addLabelsToMetricNames = (metric) => {
   if(typeof metric.metric.handler !== "undefined"){
     metric.metric.__name__ = metric.metric.__name__ + ":" + metric.metric.handler
   }
+
+  return metric
+}
+
+/**
+ * AppD metrics must be an Int. To keep metric accuracy, convert second values
+ * to milliseconds
+ */
+const convertSecondsToMilliseconds = (metric) => {
+
+  if(metric.metric.__name__.endsWith('seconds')){
+    // update metric name
+    metric.metric.__name__ = metric.metric.__name__.replace('seconds', 'milliseconds')
+
+    // update metric value
+    metric.value[1] = metric.value[1] * 1000
+  }
+
+  return metric
+}
+
+/**
+ * AppD metrics must be an Int. Convert double values to ints
+ */
+const convertDoublesToInts = (metric) => {
+
+  metric.value[1] = _.round(metric.value[1])
 
   return metric
 }
@@ -38,6 +66,15 @@ const appdRequest = async (data) => {
       "value": metric.value[1]
     }
 
+    // const response = await fetch(`${PROETHEUS_URL}/api/v1/query?query=${query}`, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Accept': 'application/json, text/plain, */*'
+    //   }
+    // })
+
+
+
     requestBody.push(value)
   }
 
@@ -47,9 +84,14 @@ const appdRequest = async (data) => {
 const publishToAppd = async (data) => {
   console.log(`[starting] ${data.length} metrics to add / update...`)
 
+  // Loop through array of metrics and convert seconds to milliseconds
+  data.map(convertSecondsToMilliseconds)
+  // Loop through array and convert values from doubles to ints
+  data.map(convertDoublesToInts)
   // Loop through array of metrics and add the labels to the metric names
   data.map(addLabelsToMetricNames)
 
+  // Send data to AppD
   await appdRequest(data)
 
   console.log(`[succeeded] ${data.length} metrics to added / updated`)
