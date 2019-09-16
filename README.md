@@ -109,7 +109,7 @@ aws_secret_access_key = YOUR_ACCESS_SECRET
 #### Send function to AWS via Claudia
 
 ```
-$ claudia create --region us-east-1 --handler lambda.handler
+$ claudia create --region us-east-1 --handler index.handler
 ```
 
 When the deployment completes, Claudia will save a new file claudia.json in
