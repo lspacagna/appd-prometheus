@@ -5,6 +5,9 @@
 This extension connects to a Prometheus endpoint and runs the specified queries.
 Responses are then parsed (and sometimes transformed) and then passed to AppDynamics as metrics.
 
+
+
+
 ## Pre-requisites
 
 1. (Optional) Homebrew - for easier installation and management
@@ -29,6 +32,9 @@ $ brew install yarn
 ```
 $ npm install claudia -g
 ```
+
+
+
 
 ## Install Steps
 
@@ -73,6 +79,9 @@ $ yarn run build
 This will compile the src/index.js file into dist/index.js. The dist/ directory
 will be created automatically. Whenever you make changes to the src/index.js
 file you should re-run this command.
+
+
+
 
 ## Run Extension
 
