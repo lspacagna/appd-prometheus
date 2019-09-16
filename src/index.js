@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import fs from 'async-file'
 import fetch from 'node-fetch'
 
 const PROETHEUS_URL = 'http://localhost:9090'

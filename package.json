@@ -2,21 +2,18 @@
   "name": "appd-prometheus",
   "version": "1.0.0",
   "description": "AppD & Prometheus integration",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "index.js",
   "repository": "git@github.com:lspacagna/appd-prometheus.git",
   "author": "Lee Spacagna <lee@spacagna.co.uk>",
   "license": "MIT",
   "dependencies": {
-    "async-file": "^2.0.2",
-    "async-request": "^1.2.0",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.5.2",
     "lodash": "^4.17.15",
-    "node-fetch": "^2.3.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "uuid": "^3.3.2"
+    "node-fetch": "^2.3.0"
   },
   "scripts": {
     "build": "babel src -d dist",
