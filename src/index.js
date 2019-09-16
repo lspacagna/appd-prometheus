@@ -162,7 +162,7 @@ exports.handler = async (event, context, callback) => {
     try{
       console.log(`[starting] Starting Script...`)
       await main()
-      callback(null, 'AppDynamics updates succeeded')
+      callback(null, '[succeeded] AppDynamics updates succeeded')
     }
     catch(e){
       callback(new Error(e))

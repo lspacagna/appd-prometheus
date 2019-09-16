@@ -74,4 +74,14 @@ This will compile the src/index.js file into dist/index.js. The dist/ directory
 will be created automatically. Whenever you make changes to the src/index.js
 file you should re-run this command.
 
-###
+### Run extension - locally
+If running locally the extension is ready to run. Run the extension with the
+following command.
+
+```
+yarn run run
+```
+
+### Run extension - Lambda
+
+Create AWS profile with IAM full access, Lambda full access, and API Gateway Admin privileges.
