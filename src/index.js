@@ -170,4 +170,4 @@ exports.handler = async (event, context, callback) => {
 
 };
 
-runLocal()
+//runLocal()

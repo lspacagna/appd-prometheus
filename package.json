@@ -1,8 +1,9 @@
 {
   "name": "appd-prometheus",
-  "version": "0.1",
+  "version": "1.0.0",
   "description": "AppD & Prometheus integration",
-  "main": "dist/index.js",
+  "files": [ "dist" ],
+  "main": "index.js",
   "repository": "git@github.com:lspacagna/appd-prometheus.git",
   "author": "Lee Spacagna <lee@spacagna.co.uk>",
   "license": "MIT",
