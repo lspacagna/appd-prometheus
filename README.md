@@ -122,3 +122,30 @@ For more detailed instructions see: https://claudiajs.com/tutorials/hello-world-
 
 You can either use the AWS UI to trigger the function. Or you can setup a trigger.
 A common trigger would be to run this extension once per minute.
+
+
+
+## Define Prometheus Queries
+
+The extension has been designed to run Prometheus queries in series. By default
+the extension will run two sample queries and send the data to AppD.
+
+Currently, the queries are configured within the extension code. Future versions
+of this extension will configure in an external configuration file.
+
+To change the default queries find the getDataFromPrometheus() method. For each
+query you would like to run add a new 'prometheusRequest' line. The query should
+be passed as the variable to the prometheusRequest call.
+
+Default config:
+```
+data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
+data.push(await prometheusRequest('prometheus_http_requests_total'))
+```
+
+Default config with custom query:
+```
+data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
+data.push(await prometheusRequest('prometheus_http_requests_total'))
+data.push(await prometheusRequest('CUSTOM QUERY HERE'))
+```
