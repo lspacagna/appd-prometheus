@@ -81,9 +81,30 @@ If running locally the extension is ready to run. Run the extension with the
 following command.
 
 ```
-yarn run run
+$ yarn run run
 ```
 
 ### Run extension - Lambda
 
-Create AWS profile with IAM full access, Lambda full access, and API Gateway Admin privileges.
+Create AWS profile with IAM full access, Lambda full access, and API Gateway
+Admin privileges.
+
+Add the keys to your .aws/credentials file
+
+```
+[claudia]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_ACCESS_SECRET
+```
+
+#### Send function to AWS via Claudia
+
+```
+claudia create --region us-east-1 --handler lambda.handler
+```
+
+When the deployment completes, Claudia will save a new file claudia.json in
+your project directory, with the function details, so you can invoke and
+update it easily.
+
+For more detailed instructions see: https://claudiajs.com/tutorials/hello-world-lambda.html
