@@ -11,7 +11,7 @@ Responses are then parsed (and sometimes transformed) and then passed to AppDyna
 ## Pre-requisites
 
 1. (Optional) Homebrew - for easier installation and management
-2. Node.JS - currently targeting latest LTS version (10.16.3)x
+2. Node.JS - currently targeting latest LTS version (10.16.3)
 
 ```
 $ brew install node
@@ -149,3 +149,5 @@ data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
 data.push(await prometheusRequest('prometheus_http_requests_total'))
 data.push(await prometheusRequest('CUSTOM QUERY HERE'))
 ```
+
+Remember to re-compile the project after making changes.
