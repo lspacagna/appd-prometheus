@@ -100,7 +100,7 @@ aws_secret_access_key = YOUR_ACCESS_SECRET
 #### Send function to AWS via Claudia
 
 ```
-claudia create --region us-east-1 --handler lambda.handler
+$ claudia create --region us-east-1 --handler lambda.handler
 ```
 
 When the deployment completes, Claudia will save a new file claudia.json in
@@ -108,3 +108,8 @@ your project directory, with the function details, so you can invoke and
 update it easily.
 
 For more detailed instructions see: https://claudiajs.com/tutorials/hello-world-lambda.html
+
+#### Running in AWS
+
+You can either use the AWS UI to trigger the function. Or you can setup a trigger.
+A common trigger would be to run this extension once per minute.
