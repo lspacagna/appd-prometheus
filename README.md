@@ -74,6 +74,8 @@ This will compile the src/index.js file into dist/index.js. The dist/ directory
 will be created automatically. Whenever you make changes to the src/index.js
 file you should re-run this command.
 
+## Run Extension
+
 ### Run extension - locally
 If running locally the extension is ready to run. Run the extension with the
 following command.
