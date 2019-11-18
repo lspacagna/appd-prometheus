@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import fetch from 'node-fetch'
 import fs from 'fs'
+import analytics from './analytics.js'
 
 /**
 * Set to true to read from a local file instead of the Prometheus API
@@ -109,7 +110,7 @@ const appdRequest = async (data) => {
   }
 }
 
-const publishToAppd = async (data) => {
+const publishMetricsToAppd = async (data) => {
   console.log(`[starting] ${data.length} metrics to add / update...`)
 
   // Loop through array of metrics and convert seconds to milliseconds
@@ -163,13 +164,18 @@ const main = async () => {
     if(READ_LOCAL){
       console.log('Reading locally...')
       data = fs.readFileSync('data/sample.json', 'utf8');
+      data = JSON.parse(data)
     }
     else{
+      console.log('Reading from Prometheus...')
       data = await getDataFromPrometheus()
     }
 
-    console.log(data)
-    //await publishToAppd(data)
+    //await publishMetricsToAppd(data)
+    if(REPORT_ANALYTICS){
+      await analytics.publish(data)
+    }
+
 
   } catch (e) {
     console.error(e)
