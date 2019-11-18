@@ -5,15 +5,19 @@
   "identifier": "string",
   "instance": "string",
   "job": "string",
-  "kubernetesNamespace": "string",
-  "kubernetesPodName": "string",
+  "kubernetes_namespace": "string",
+  "kubernetes_pod_name": "string",
   "method": "string",
   "outcome": "string",
-  "podTemplateHash": "string",
+  "pod_template_hash": "string",
   "purpose": "string",
   "region": "string",
   "replica": "string",
   "status": "string",
   "uri": "string",
-  "value": "float"
+  "value": "float",
+  "client": "string",
+  "controller_revision_hash": "string",
+  "pod_template_generation": "string",
+  "rt": "string"
 }

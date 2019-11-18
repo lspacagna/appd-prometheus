@@ -75,7 +75,7 @@ const createSchemaIfRequired = async (settings) => {
 }
 
 const parseData = (data) => {
-
+  console.log(`[starting] Parsing Prometheus data...`)
   const processed = _.map(data, function(n){
     let temp = n
     temp.metric.value = n.value[1]
@@ -91,25 +91,49 @@ const parseData = (data) => {
     temp.name = temp.__name__
     delete temp.__name__
 
+    temp.value = parseFloat(temp.value)
+
     return temp
   });
-
+  console.log(`[succeeded] Parsed Prometheus data.`)
   return processed
 }
 
-const publishEventsToAppd = async (data) => {
-  console.log(data)
-}
+const publishEventsToAppd = async (settings, data) => {
+  console.log(`[starting] Publishing to AppD...`)
 
-const sendData = async (settings, data) => {
-  const parsedData = parseData(data)
+  const response = await fetch(`${settings.analyticsUrl}/events/publish/${settings.schemaName}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'X-Events-API-AccountName': settings.accountName,
+      'X-Events-API-Key': settings.apiKey,
+      'Content-type': 'application/vnd.appd.events+json;v=2'
+    },
+    body: JSON.stringify(data)
+  });
 
-  publishEventsToAppd(parsedData)
+  if(response.status !== 200){
+    const responseJSON = await response.json()
+  }
+
+  switch (response.status) {
+    case 200:
+      console.log(`[succeeded] Publishing to AppD completed.`)
+      return true;
+      break;
+    default:
+      throw new Error(`Unable to update schema | ${responseJSON.statusCode} - ${responseJSON.message}`);
+      break;
+  }
+
 }
 
 module.exports = {
   publish: async function (settings, data) {
     await createSchemaIfRequired(settings)
-    await sendData(settings, data)
+    const parsedData = parseData(data)
+
+    await publishEventsToAppd(settings,parsedData)
   }
 };

@@ -210,6 +210,7 @@ const main = async () => {
       },data)
     }
 
+    console.log(`[complete] Processing complete.`)
 
   } catch (e) {
     console.error(e)
