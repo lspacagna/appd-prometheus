@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import fetch from 'node-fetch'
 import fs from 'fs'
 
@@ -68,17 +69,47 @@ const schemaExists = async (settings) => {
 }
 
 const createSchemaIfRequired = async (settings) => {
-  if(await schemaExists(settings)){
-    // send event
-  }
-  else{
+  if(!await schemaExists(settings)){
     await createSchema(settings)
   }
+}
 
+const parseData = (data) => {
+
+  const processed = _.map(data, function(n){
+    let temp = n
+    temp.metric.value = n.value[1]
+    temp.metric.eventTimestamp = n.value[0]
+
+    // strip decimal
+    temp.metric.eventTimestamp = temp.metric.eventTimestamp * 1000
+
+    // flatten
+    temp = temp.metric
+
+    // remove underscore from name
+    temp.name = temp.__name__
+    delete temp.__name__
+
+    return temp
+  });
+
+  return processed
+}
+
+const publishEventsToAppd = async (data) => {
+  console.log(data)
+}
+
+const sendData = async (settings, data) => {
+  const parsedData = parseData(data)
+
+  publishEventsToAppd(parsedData)
 }
 
 module.exports = {
   publish: async function (settings, data) {
     await createSchemaIfRequired(settings)
+    await sendData(settings, data)
   }
 };
