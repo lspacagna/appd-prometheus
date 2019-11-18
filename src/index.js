@@ -4,9 +4,9 @@ import fs from 'fs'
 import analytics from './analytics.js'
 
 /**
-* Set to true to read from a local file instead of the Prometheus API
-* Default: false
-*/
+ * Set to true to read from a local file instead of the Prometheus API
+ * Default: false
+ */
 const READ_LOCAL = true
 
 /**
@@ -17,19 +17,46 @@ const READ_LOCAL = true
 const REPORT_ANALYTICS = true
 
 /**
-* Reporting data to analytics requires a schema to be created.
-* Change this value if you are connecting more than one of these extensions to
-* more than one Prometheus deployment
-* Default: prometheus-metrics
-*/
-const SCHEMA_NAME = "prometheus-metrics"
-
+ * URL of Prometheus deployment
+ */
 const PROETHEUS_URL = 'http://localhost:9090'
+
 /**
  * URL of the HTTP listener running on your machine agent.
  * See https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+HTTP+Listener
  */
 const APPD_MA_URL = 'http://localhost:8293/api/v1/metrics'
+
+/**
+ * URL to connect to the AppD controller events service
+ * See https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-create_schemaCreateEventSchema
+ * for the URL for your controller.
+ */
+const APPD_ANALYTICS_URL = "https://analytics.api.appdynamics.com"
+
+/**
+ * Account name to connect to the AppD controller
+ * See Settings > License > Account for the value for your controller
+ */
+const APPD_GLOBAL_ACCOUNT_NAME = "lspac1_d3af08ad-64fa-4871-a017-988fc2b9d014"
+
+/**
+ * API Key to connect to AppD controller events service
+ * See https://docs.appdynamics.com/display/PRO45/Managing+API+Keys
+ */
+
+const APPD_EVENTS_API_KEY = "c8e04b82-2075-4f5d-b476-82da9cc3d146"
+
+/**
+ * Reporting data to analytics requires a schema to be created.
+ * Change this value if you are connecting more than one of these extensions to
+ * more than one Prometheus deployment
+ * Default: prometheus-metrics
+ */
+const SCHEMA_NAME = "prometheus-events"
+
+
+
 
 /**
  * Some Prometheus metrics return several values with different labels.
@@ -162,18 +189,25 @@ const main = async () => {
   try {
     let data
     if(READ_LOCAL){
-      console.log('Reading locally...')
+      console.log(`[starting] Reading locally...`)
       data = fs.readFileSync('data/sample.json', 'utf8');
       data = JSON.parse(data)
+      console.log(`[succeeded] Local file read`)
     }
     else{
-      console.log('Reading from Prometheus...')
+      console.log(`starting] Reading from Prometheus...`)
       data = await getDataFromPrometheus()
+      console.log(`[succeeded] Prometheus data collected`)
     }
 
     //await publishMetricsToAppd(data)
     if(REPORT_ANALYTICS){
-      await analytics.publish(data)
+      await analytics.publish({
+        analyticsUrl: APPD_ANALYTICS_URL,
+        schemaName: SCHEMA_NAME,
+        accountName: APPD_GLOBAL_ACCOUNT_NAME,
+        apiKey: APPD_EVENTS_API_KEY
+      },data)
     }
 
 
