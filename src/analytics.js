@@ -5,7 +5,6 @@ const createSchema = async (settings) => {
   console.log(`[starting] creating ${settings.schemaName} schema...`)
 
   const schemaData = JSON.parse(fs.readFileSync('conf/schema.json', 'utf8'))
-
   const fullSchema = {
     "schema" : schemaData
   }
@@ -21,12 +20,15 @@ const createSchema = async (settings) => {
     body: JSON.stringify(fullSchema)
   });
 
+  if(response.status !== 201){
+    const responseJSON = await response.json()
+  }
+
   if(await response.status === 201){
-    console.log(response.status)
+    console.log(`[succeeded] ${settings.schemaName} schema created`)
     return true
   }
   else{
-    console.log(response.status)
     throw new Error(`Unable to create schema | ${responseJSON.statusCode} - ${responseJSON.message}`);
   }
 
