@@ -1,5 +1,12 @@
 import _ from 'lodash'
 import fetch from 'node-fetch'
+import fs from 'fs'
+
+/**
+* Set to true to read from a local file instead of the Prometheus API
+* Default: false
+*/
+const READ_LOCAL = true
 
 const PROETHEUS_URL = 'http://localhost:9090'
 /**
@@ -137,8 +144,17 @@ const getDataFromPrometheus = async () => {
 
 const main = async () => {
   try {
-    const data = await getDataFromPrometheus()
-    await publishToAppd(data)
+    let data
+    if(READ_LOCAL){
+      console.log('Reading locally...')
+      data = fs.readFileSync('data/sample.json', 'utf8');
+    }
+    else{
+      data = await getDataFromPrometheus()
+    }
+
+    console.log(data)
+    //await publishToAppd(data)
 
   } catch (e) {
     console.error(e)

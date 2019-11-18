@@ -1,0 +1,114 @@
+[{
+  "metric": {
+    "__name__": "http_server_requests_seconds_sum",
+    "app": "accountinghub",
+    "exception": "None",
+    "identifier": "nemoint",
+    "instance": "ip-10-50-42-127.eu-west-1.compute.internal",
+    "job": "kubernetes-pods-k8s",
+    "kubernetes_namespace": "corebankingc",
+    "kubernetes_pod_name": "accountinghub-default-7689865c7d-ln4z5",
+    "method": "GET",
+    "outcome": "SUCCESS",
+    "pod_template_hash": "7689865c7d",
+    "purpose": "QA",
+    "region": "eu-west-1",
+    "replica": "i-0b87caffa1bf6129c",
+    "status": "200",
+    "uri": "/health"
+  },
+  "value": [1572881709.086, "67.732883193"]
+}, {
+  "metric": {
+    "__name__": "http_server_requests_seconds_count",
+    "app": "accountinghub",
+    "exception": "None",
+    "identifier": "nemoint",
+    "instance": "ip-10-50-42-127.eu-west-1.compute.internal",
+    "job": "kubernetes-pods-k8s",
+    "kubernetes_namespace": "corebankingc",
+    "kubernetes_pod_name": "accountinghub-default-7689865c7d-ln4z5",
+    "method": "GET",
+    "outcome": "SUCCESS",
+    "pod_template_hash": "7689865c7d",
+    "purpose": "QA",
+    "region": "eu-west-1",
+    "replica": "i-0b87caffa1bf6129c",
+    "status": "200",
+    "uri": "/health"
+  },
+  "value": [1572881709.035, "21208"]
+}, {
+  "metric": {
+    "__name__": "rt:client:requests",
+    "app": "l5d",
+    "client": "$/io.buoyant.rinet/443/api.addressy.com",
+    "controller_revision_hash": "86c598b65c",
+    "identifier": "nemoint",
+    "instance": "ip-10-50-42-155.eu-west-1.compute.internal",
+    "job": "kubernetes-pods-k8s",
+    "kubernetes_namespace": "linkerd",
+    "kubernetes_pod_name": "l5d-bhg8p",
+    "pod_template_generation": "1",
+    "purpose": "QA",
+    "region": "eu-west-1",
+    "replica": "i-0b87caffa1bf6129c",
+    "rt": "http-outgoing"
+  },
+  "value": [1572881709.137, "2"]
+}, {
+  "metric": {
+    "__name__": "rt:client:failures",
+    "app": "l5d",
+    "client": "$/io.buoyant.rinet/80/169.254.169.254",
+    "controller_revision_hash": "86c598b65c",
+    "exception": "com.twitter.finagle.CancelledRequestException",
+    "identifier": "nemoint",
+    "instance": "ip-10-50-49-22.eu-west-1.compute.internal",
+    "job": "kubernetes-pods-k8s",
+    "kubernetes_namespace": "linkerd",
+    "kubernetes_pod_name": "l5d-wnssr",
+    "pod_template_generation": "1",
+    "purpose": "QA",
+    "region": "eu-west-1",
+    "replica": "i-0b87caffa1bf6129c",
+    "rt": "http-outgoing"
+  },
+  "value": [1572881709.183, "6"]
+}, {
+  "metric": {
+    "__name__": "rt:client:status:5XX",
+    "app": "l5d",
+    "client": "$/io.buoyant.rinet/443/api.addressy.com",
+    "controller_revision_hash": "86c598b65c",
+    "identifier": "nemoint",
+    "instance": "ip-10-50-42-155.eu-west-1.compute.internal",
+    "job": "kubernetes-pods-k8s",
+    "kubernetes_namespace": "linkerd",
+    "kubernetes_pod_name": "l5d-bhg8p",
+    "pod_template_generation": "1",
+    "purpose": "QA",
+    "region": "eu-west-1",
+    "replica": "i-0b87caffa1bf6129c",
+    "rt": "http-outgoing"
+  },
+  "value": [1572881709.205, "0"]
+}, {
+  "metric": {
+    "__name__": "rt:client:status:4XX",
+    "app": "l5d",
+    "client": "$/io.buoyant.rinet/443/api.addressy.com",
+    "controller_revision_hash": "86c598b65c",
+    "identifier": "nemoint",
+    "instance": "ip-10-50-42-155.eu-west-1.compute.internal",
+    "job": "kubernetes-pods-k8s",
+    "kubernetes_namespace": "linkerd",
+    "kubernetes_pod_name": "l5d-bhg8p",
+    "pod_template_generation": "1",
+    "purpose": "QA",
+    "region": "eu-west-1",
+    "replica": "i-0b87caffa1bf6129c",
+    "rt": "http-outgoing"
+  },
+  "value": [1572881709.233, "0"]
+}]
