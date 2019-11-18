@@ -6,7 +6,7 @@ const PROETHEUS_URL = 'http://localhost:9090'
  * URL of the HTTP listener running on your machine agent.
  * See https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+HTTP+Listener
  */
-const APPD_URL = 'http://localhost:8293/api/v1/metrics'
+const APPD_MA_URL = 'http://localhost:8293/api/v1/metrics'
 
 /**
  * Some Prometheus metrics return several values with different labels.
@@ -71,7 +71,7 @@ const appdRequest = async (data) => {
     requestBody.push(value)
   }
 
-  const response = await fetch(APPD_URL, {
+  const response = await fetch(APPD_MA_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
