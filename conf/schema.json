@@ -1,0 +1,19 @@
+{
+  "name": "string",
+  "app": "string",
+  "exception": "string",
+  "identifier": "string",
+  "instance": "string",
+  "job": "string",
+  "kubernetesNamespace": "string",
+  "kubernetesPodName": "string",
+  "method": "string",
+  "outcome": "string",
+  "podTemplateHash": "string",
+  "purpose": "string",
+  "region": "string",
+  "replica": "string",
+  "status": "string",
+  "uri": "string",
+  "value": "float"
+}

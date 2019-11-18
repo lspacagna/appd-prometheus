@@ -53,7 +53,7 @@ const APPD_EVENTS_API_KEY = "c8e04b82-2075-4f5d-b476-82da9cc3d146"
  * more than one Prometheus deployment
  * Default: prometheus-metrics
  */
-const SCHEMA_NAME = "prometheus-events"
+const SCHEMA_NAME = "prometheus_events"
 
 
 
@@ -190,7 +190,7 @@ const main = async () => {
     let data
     if(READ_LOCAL){
       console.log(`[starting] Reading locally...`)
-      data = fs.readFileSync('data/sample.json', 'utf8');
+      data = fs.readFileSync('data/sample.json', 'utf8')
       data = JSON.parse(data)
       console.log(`[succeeded] Local file read`)
     }
