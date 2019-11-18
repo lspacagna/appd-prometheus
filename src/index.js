@@ -8,6 +8,21 @@ import fs from 'fs'
 */
 const READ_LOCAL = true
 
+/**
+* Set to false to prevent extension reporting returned values to analytics.
+* When disabled only metrics will be created.
+* Default: true
+*/
+const REPORT_ANALYTICS = true
+
+/**
+* Reporting data to analytics requires a schema to be created.
+* Change this value if you are connecting more than one of these extensions to
+* more than one Prometheus deployment
+* Default: prometheus-metrics
+*/
+const SCHEMA_NAME = "prometheus-metrics"
+
 const PROETHEUS_URL = 'http://localhost:9090'
 /**
  * URL of the HTTP listener running on your machine agent.
