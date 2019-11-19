@@ -113,8 +113,10 @@ const publishEventsToAppd = async (settings, data) => {
     body: JSON.stringify(data)
   });
 
+
+  let responseJSON
   if(response.status !== 200){
-    const responseJSON = await response.json()
+    responseJSON = await response.json()
   }
 
   switch (response.status) {

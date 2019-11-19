@@ -19,5 +19,9 @@
   "client": "string",
   "controller_revision_hash": "string",
   "pod_template_generation": "string",
-  "rt": "string"
+  "rt": "string",
+  "interval": "string",
+  "quantile": "string",
+  "code": "string",
+  "handler": "string"
 }
