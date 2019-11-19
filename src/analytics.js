@@ -113,9 +113,8 @@ const publishEventsToAppd = async (settings, data) => {
     body: JSON.stringify(data)
   });
 
-
   let responseJSON
-  if(response.status !== 200){
+  if(response.status !== 200 && response.status !== 413){
     responseJSON = await response.json()
   }
 
@@ -124,8 +123,10 @@ const publishEventsToAppd = async (settings, data) => {
       console.log(`[succeeded] Publishing to AppD completed.`)
       return true;
       break;
+    case 413:
+      throw new Error(`Unable to update schema | Payload from Prometheus too large`);
     default:
-      throw new Error(`Unable to update schema | ${responseJSON.statusCode} - ${responseJSON.message}`);
+      throw new Error(`Unable to update schema | ${responseJSON.statusCode} - ${responseJSON.message}`)
       break;
   }
 
