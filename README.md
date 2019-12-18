@@ -72,6 +72,11 @@ Open the the conf/config.json file for editing. The default configuration is bel
   "local_file": "data/sample.json"
 }
 ```
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
+
 
 Parameter | Function | Default Value
 ------------ | -------------
