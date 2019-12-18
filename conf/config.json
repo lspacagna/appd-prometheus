@@ -1,0 +1,8 @@
+{
+  "read_local": false ,
+  "prometheus_url": "http://localhost:9090",
+  "appd_analytics_url": "https://analytics.api.appdynamics.com",
+  "appd_global_account_name": "lspac1_d3af08ad-64fa-4871-a017-988fc2b9d014",
+  "appd_events_api_key": "c8e04b82-2075-4f5d-b476-82da9cc3d146",
+  "schema_name": "prometheus_events2"
+}

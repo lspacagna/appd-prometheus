@@ -7,33 +7,32 @@ import analytics from './analytics.js'
  * Set to true to read from a local file instead of the Prometheus API
  * Default: false
  */
-const READ_LOCAL = false
-
+let READ_LOCAL
 
 /**
  * URL of Prometheus deployment
  */
-const PROETHEUS_URL = 'http://localhost:9090'
+let PROMETHEUS_URL
 
 /**
  * URL to connect to the AppD controller events service
  * See https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-create_schemaCreateEventSchema
  * for the URL for your controller.
  */
-const APPD_ANALYTICS_URL = "https://analytics.api.appdynamics.com"
+let APPD_ANALYTICS_URL
 
 /**
  * Account name to connect to the AppD controller
  * See Settings > License > Account for the value for your controller
  */
-const APPD_GLOBAL_ACCOUNT_NAME = "lspac1_d3af08ad-64fa-4871-a017-988fc2b9d014"
+let APPD_GLOBAL_ACCOUNT_NAME
 
 /**
  * API Key to connect to AppD controller events service
  * See https://docs.appdynamics.com/display/PRO45/Managing+API+Keys
  */
 
-const APPD_EVENTS_API_KEY = "c8e04b82-2075-4f5d-b476-82da9cc3d146"
+let APPD_EVENTS_API_KEY
 
 /**
  * Reporting data to analytics requires a schema to be created.
@@ -41,13 +40,13 @@ const APPD_EVENTS_API_KEY = "c8e04b82-2075-4f5d-b476-82da9cc3d146"
  * more than one Prometheus deployment
  * Default: prometheus-metrics
  */
-const SCHEMA_NAME = "prometheus_events"
+let SCHEMA_NAME
 
 
 const prometheusRequest = async (query) => {
   console.log(`[starting] '${query}' query...`)
 
-  const response = await fetch(`${PROETHEUS_URL}/api/v1/query?query=${query}`, {
+  const response = await fetch(`${PROMETHEUS_URL}/api/v1/query?query=${query}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json, text/plain, */*'
@@ -78,8 +77,21 @@ const getDataFromPrometheus = async () => {
   return data
 }
 
+const processConfig = () => {
+  const config = JSON.parse(fs.readFileSync('conf/config.json', 'utf8'))
+
+  READ_LOCAL = (typeof x === 'undefined') ? config.read_local : false;
+  PROMETHEUS_URL = config.prometheus_url
+  APPD_ANALYTICS_URL = config.appd_analytics_url
+  APPD_GLOBAL_ACCOUNT_NAME = config.appd_global_account_name
+  APPD_EVENTS_API_KEY = config.appd_events_api_key
+  SCHEMA_NAME = (typeof x === 'undefined') ? config.schema_name : "prometheus_events";
+}
+
 const main = async () => {
   try {
+    processConfig()
+
     let data
     if(READ_LOCAL){
       console.log(`[starting] Reading locally...`)
