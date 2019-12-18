@@ -73,14 +73,17 @@ Open the the conf/config.json file for editing. The default configuration is bel
 }
 ```
 
+Parameter | Function | Default Value
+------------ | -------------
+read_local | Choose to read from local data file instead of pulling data from Prometheus API. Useful during debugging. | false
+prometheus_url | The URL of your Prometheus deployment | http://localhost:9090
+appd_analytics_url | URL to connect to the AppD controller events service. See https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-create_schemaCreateEventSchema for the URL for your controller. | (blank)
 
 
 
 
 
-```
-const PROETHEUS_URL = 'http://localhost:9090'
-```
+
 ### Configure the extension to report to your already deployed machine agent
 
 Edit the APPD_URL constant at teh top of src/index.js. This URL should always end with
