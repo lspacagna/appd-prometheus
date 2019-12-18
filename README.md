@@ -72,10 +72,6 @@ Open the the conf/config.json file for editing. The default configuration is bel
   "local_file": "data/sample.json"
 }
 ```
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
 
 
 Parameter | Function | Default Value
@@ -83,6 +79,10 @@ Parameter | Function | Default Value
 read_local | Choose to read from local data file instead of pulling data from Prometheus API. Useful during debugging. | false
 prometheus_url | The URL of your Prometheus deployment | http://localhost:9090
 appd_analytics_url | URL to connect to the AppD controller events service. See https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-create_schemaCreateEventSchema for the URL for your controller. | (blank)
+appd_global_account_name | Account name to connect to the AppD controller See Settings > License > Account for the value for your controller | (blank)
+appd_events_api_key | API Key to connect to AppD controller events service See https://docs.appdynamics.com/display/PRO45/Managing+API+Keys | (blank)
+schema_name | Reporting data to analytics requires a schema to be created. Change this value if you are connecting more than one of these extensions to more than one Prometheus deployment | prometheus_events
+local_file | The location of the local file used for data when read_local is set to true | data/sample.json
 
 
 
