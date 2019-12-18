@@ -42,6 +42,8 @@ let APPD_EVENTS_API_KEY
  */
 let SCHEMA_NAME
 
+let LOCAL_FILE
+
 
 const prometheusRequest = async (query) => {
   console.log(`[starting] '${query}' query...`)
@@ -68,9 +70,13 @@ const prometheusRequest = async (query) => {
 const getDataFromPrometheus = async () => {
   let data = []
 
-  // Make Prometheus queries
-  data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
-  data.push(await prometheusRequest('prometheus_http_requests_total'))
+  // Get queries from config file
+  const queries = fs.readFileSync('conf/queries.txt', 'utf8').toString().trim().split("\n")
+
+  for (const query of queries){
+    // Make Prometheus query
+    data.push(await prometheusRequest(query))
+  }
 
   data = _.flatten(data)
 
@@ -86,6 +92,7 @@ const processConfig = () => {
   APPD_GLOBAL_ACCOUNT_NAME = config.appd_global_account_name
   APPD_EVENTS_API_KEY = config.appd_events_api_key
   SCHEMA_NAME = (typeof x === 'undefined') ? config.schema_name : "prometheus_events";
+  LOCAL_FILE = (typeof x === 'undefined') ? config.local_file : "data/sample.json";
 }
 
 const main = async () => {
@@ -95,7 +102,7 @@ const main = async () => {
     let data
     if(READ_LOCAL){
       console.log(`[starting] Reading locally...`)
-      data = fs.readFileSync('data/sample.json', 'utf8')
+      data = fs.readFileSync(LOCAL_FILE, 'utf8')
       data = JSON.parse(data)
       console.log(`[succeeded] Local file read`)
     }
