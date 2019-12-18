@@ -23,5 +23,7 @@
   "interval": "string",
   "quantile": "string",
   "code": "string",
-  "handler": "string"
+  "handler": "string",
+  "statistics": "string",
+  "fraud_fraudamlmanager": "string"
 }

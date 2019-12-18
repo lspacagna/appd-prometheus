@@ -7,25 +7,13 @@ import analytics from './analytics.js'
  * Set to true to read from a local file instead of the Prometheus API
  * Default: false
  */
-const READ_LOCAL = true
+const READ_LOCAL = false
 
-/**
-* Set to false to prevent extension reporting returned values to analytics.
-* When disabled only metrics will be created.
-* Default: true
-*/
-const REPORT_ANALYTICS = true
 
 /**
  * URL of Prometheus deployment
  */
 const PROETHEUS_URL = 'http://localhost:9090'
-
-/**
- * URL of the HTTP listener running on your machine agent.
- * See https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+HTTP+Listener
- */
-const APPD_MA_URL = 'http://localhost:8293/api/v1/metrics'
 
 /**
  * URL to connect to the AppD controller events service
@@ -55,101 +43,6 @@ const APPD_EVENTS_API_KEY = "c8e04b82-2075-4f5d-b476-82da9cc3d146"
  */
 const SCHEMA_NAME = "prometheus_events"
 
-
-
-
-/**
- * Some Prometheus metrics return several values with different labels.
- * Method adds the labels to the metric names ready for AppD
- */
-const addLabelsToMetricNames = (metric) => {
-
-  if(typeof metric.metric.quantile !== "undefined"){
-    metric.metric.__name__ = metric.metric.__name__ + ":" + metric.metric.quantile
-  }
-
-  if(typeof metric.metric.handler !== "undefined"){
-    metric.metric.__name__ = metric.metric.__name__ + ":" + metric.metric.handler
-  }
-
-  return metric
-}
-
-/**
- * AppD metrics must be an Int. To keep metric accuracy, convert second values
- * to milliseconds
- */
-const convertSecondsToMilliseconds = (metric) => {
-
-  if(metric.metric.__name__.endsWith('seconds')){
-    // update metric name
-    metric.metric.__name__ = metric.metric.__name__.replace('seconds', 'milliseconds')
-
-    // update metric value
-    metric.value[1] = metric.value[1] * 1000
-  }
-
-  return metric
-}
-
-/**
- * AppD metrics must be an Int. Convert double values to ints
- */
-const convertDoublesToInts = (metric) => {
-
-  metric.value[1] = _.round(metric.value[1])
-
-  return metric
-}
-
-const appdRequest = async (data) => {
-  const requestBody = []
-
-  for(let metric of data){
-
-    /**
-    * Creating payload to be passed to AppD API.
-    * See https://docs.appdynamics.com/display/latest/Standalone+Machine+Agent+HTTP+Listener
-    * for available options.
-    */
-    const value = {
-      "metricName": `Custom Metrics|Prometheus|${metric.metric.job}|${metric.metric.__name__}`,
-      "aggregatorType": "OBSERVATION",
-      "value": metric.value[1]
-    }
-
-    requestBody.push(value)
-  }
-
-  const response = await fetch(APPD_MA_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  })
-
-  if(await response.ok){
-    console.log(`[succeeded] ${data.length} metrics to added / updated`)
-  }
-  else{
-    throw new Error(response.statusText);
-  }
-}
-
-const publishMetricsToAppd = async (data) => {
-  console.log(`[starting] ${data.length} metrics to add / update...`)
-
-  // Loop through array of metrics and convert seconds to milliseconds
-  data.map(convertSecondsToMilliseconds)
-  // Loop through array and convert values from doubles to ints
-  data.map(convertDoublesToInts)
-  // Loop through array of metrics and add the labels to the metric names
-  data.map(addLabelsToMetricNames)
-
-  // Send data to AppD
-  await appdRequest(data)
-}
 
 const prometheusRequest = async (query) => {
   console.log(`[starting] '${query}' query...`)
@@ -200,15 +93,12 @@ const main = async () => {
       console.log(`[succeeded] Prometheus data collected`)
     }
 
-    //await publishMetricsToAppd(data)
-    if(REPORT_ANALYTICS){
-      await analytics.publish({
-        analyticsUrl: APPD_ANALYTICS_URL,
-        schemaName: SCHEMA_NAME,
-        accountName: APPD_GLOBAL_ACCOUNT_NAME,
-        apiKey: APPD_EVENTS_API_KEY
-      },data)
-    }
+    await analytics.publish({
+      analyticsUrl: APPD_ANALYTICS_URL,
+      schemaName: SCHEMA_NAME,
+      accountName: APPD_GLOBAL_ACCOUNT_NAME,
+      apiKey: APPD_EVENTS_API_KEY
+    },data)
 
     console.log(`[complete] Processing complete.`)
 
