@@ -79,7 +79,7 @@ Content in the first column | Content in the second column
 
 
 Parameter | Function | Default Value
------------- | -------------
+--------- | -------- | -------------
 read_local | Choose to read from local data file instead of pulling data from Prometheus API. Useful during debugging. | false
 prometheus_url | The URL of your Prometheus deployment | http://localhost:9090
 appd_analytics_url | URL to connect to the AppD controller events service. See https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-create_schemaCreateEventSchema for the URL for your controller. | (blank)
