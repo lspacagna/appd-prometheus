@@ -79,8 +79,8 @@ Parameter | Function | Default Value
 read_local | Choose to read from local data file instead of pulling data from Prometheus API. Useful during debugging. | `false`
 prometheus_url | The URL of your Prometheus deployment | `http://localhost:9090`
 appd_analytics_url | URL to connect to the AppD controller events service. See [our documentation](https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-AbouttheAnalyticsEventsAPI) for the URL for your controller. | (blank)
-appd_global_account_name | Account name to connect to the AppD controller See Settings > License > Account for the value for your controller | (blank)
-appd_events_api_key | API Key to connect to AppD controller events service see [our documentation](https://docs.appdynamics.com/display/PRO45/Managing+API+Keys) to create an API key. | (blank)
+appd_global_account_name | Account name to connect to the AppD controller. See Settings > License > Account for the value for your controller | (blank)
+appd_events_api_key | API Key to connect to AppD controller events service. See [our documentation](https://docs.appdynamics.com/display/PRO45/Managing+API+Keys) to create an API key. | (blank)
 schema_name | Reporting data to analytics requires a schema to be created. Change this value if you are connecting more than one of these extensions to more than one Prometheus deployment | `prometheus_events`
 local_file | The location of the local file used for data when `read_local` is set to `true` | `data/sample.json`
 
@@ -125,7 +125,7 @@ prometheus_http_requests_total
 
 The two default queries are listed above. You can add and change these to match the data that you'd like to export from Prometheus to AppD. Each query should be on its own line.
 
-Once you have added your queries you should ensure that your schema config matches the data that Prometheus will return. Failure to do this will cause an error at runtime. 
+Once you have added your queries you should ensure that your schema config matches the data that Prometheus will return. Failure to do this will cause an error at runtime.
 
 ## Run Extension
 
@@ -134,7 +134,13 @@ If running locally the extension is ready to run. Run the extension with the
 following command.
 
 ```
-$ yarn run run
+$ npm run run
+```
+
+or
+
+```
+$ node dist/index.js
 ```
 
 ### Run extension - Lambda
@@ -166,32 +172,3 @@ For more detailed instructions see: https://claudiajs.com/tutorials/hello-world-
 
 You can either use the AWS UI to trigger the function. Or you can setup a trigger.
 A common trigger would be to run this extension once per minute.
-
-
-
-## Define Prometheus Queries
-
-The extension has been designed to run Prometheus queries in series. By default
-the extension will run two sample queries and send the data to AppD.
-
-Currently, the queries are configured within the extension code. Future versions
-of this extension will configure in an external configuration file.
-
-To change the default queries find the getDataFromPrometheus() method. For each
-query you would like to run add a new 'prometheusRequest' line. The query should
-be passed as the variable to the prometheusRequest call.
-
-Default config:
-```
-data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
-data.push(await prometheusRequest('prometheus_http_requests_total'))
-```
-
-Default config with custom query:
-```
-data.push(await prometheusRequest('prometheus_target_interval_length_seconds'))
-data.push(await prometheusRequest('prometheus_http_requests_total'))
-data.push(await prometheusRequest('CUSTOM QUERY HERE'))
-```
-
-Remember to re-compile the project after making changes.
