@@ -3,40 +3,33 @@
 ## Introduction
 
 This extension connects to a Prometheus endpoint and runs the specified queries.
-Responses are then parsed (and sometimes transformed) and then passed to AppDynamics as metrics.
+Responses are then parsed and then passed to AppDynamics as analytics events.
 
 
 
 
 ## Pre-requisites
 
-1. (Optional) Homebrew - for easier installation and management
+1. (Optional) Homebrew - for easier installation and management on MacOS
 2. Node.JS - currently targeting latest LTS version (10.16.3)
 
 ```
 $ brew install node
 ```
 
-3. Yarn (installed via Homebrew) - latest version (1.17.3)
+3. (Optional) AWS Account with access to IAM and Lambda - only required if deploying to Lambda
 
-```
-$ brew install yarn
-```
-
-4. AppDynamics Machine Agent
-
-4. (Optional) AWS Account with access to IAM and Lambda - only required if deploying to Lambda
-
-5. (Optional) Claudia.js - only required if deploying to Lambda
+4. (Optional) Claudia.js - only required if deploying to Lambda
 
 ```
 $ npm install claudia -g
 ```
 
+5. AppDynamics controller with appropriate Analytics licence.
 
 
 
-## Install Steps
+## Installation
 
 ### Clone package
 
@@ -46,17 +39,44 @@ $ cd appd-prometheus
 ```
 ### Choose to run extension locally or in Lambda
 
-This extension default configuration is run locally. If you would like to run the
+This extension default configuration is to run locally. If you would like to run the
 extension inside a Lambda function. You need to edit src/index.js and comment
-out the last line in the file. This should look like this:
+out the last line in the file. It should look like this:
 
 ```
 // runLocal()
 ```
 
-### Configure extension to connect to your Prometheus endpoint
+### Rebuild project (only if deploying to Lambda)
 
-Edit the PROMETHEUS_URL constant at the top of src/index.js
+If you are deploying to Lambda and have commented out 'runLocal()' you will need to rebuild the project. Rebuilding will parse the source code in /src and store the built version in /dist.
+
+```
+npm run build
+```
+
+## Configuration
+
+### Configure extension controller connection
+
+Open the the conf/config.json file for editing. The default configuration is below
+
+```
+{
+  "read_local": false ,
+  "prometheus_url": "http://localhost:9090",
+  "appd_analytics_url": "https://analytics.api.appdynamics.com",
+  "appd_global_account_name": "",
+  "appd_events_api_key": "",
+  "schema_name": "prometheus_events",
+  "local_file": "data/sample.json"
+}
+```
+
+
+
+
+
 
 ```
 const PROETHEUS_URL = 'http://localhost:9090'
