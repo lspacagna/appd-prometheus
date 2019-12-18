@@ -78,38 +78,38 @@ Parameter | Function | Default Value
 --------- | -------- | -------------
 read_local | Choose to read from local data file instead of pulling data from Prometheus API. Useful during debugging. | `false`
 prometheus_url | The URL of your Prometheus deployment | `http://localhost:9090`
-appd_analytics_url | URL to connect to the AppD controller events service. See https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-create_schemaCreateEventSchema for the URL for your controller. | (blank)
+appd_analytics_url | URL to connect to the AppD controller events service. See [our documentation](https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-AbouttheAnalyticsEventsAPI) for the URL for your controller. | (blank)
 appd_global_account_name | Account name to connect to the AppD controller See Settings > License > Account for the value for your controller | (blank)
-appd_events_api_key | API Key to connect to AppD controller events service See https://docs.appdynamics.com/display/PRO45/Managing+API+Keys | (blank)
+appd_events_api_key | API Key to connect to AppD controller events service See [our documentation](https://docs.appdynamics.com/display/PRO45/Managing+API+Keys) | (blank)
 schema_name | Reporting data to analytics requires a schema to be created. Change this value if you are connecting more than one of these extensions to more than one Prometheus deployment | `prometheus_events`
 local_file | The location of the local file used for data when `read_local` is set to `true` | `data/sample.json`
 
+### Configure Schema
 
+To be able to publish Prometheus data to AppD a custom schema needs to be created in your controller. This schema must match the data types of your Prometheus data. The default schema configuration matches the schema required for the default queries in conf/queries.txt.
 
-
-
-
-### Configure the extension to report to your already deployed machine agent
-
-Edit the APPD_URL constant at teh top of src/index.js. This URL should always end with
-'/api/v1/metrics'
+Open conf/schema.json for editing.
 
 ```
-const APPD_URL = 'http://localhost:8293/api/v1/metrics'
+{
+  "name": "string",
+  "instance": "string",
+  "job": "string",
+  "quantile": "string",
+  "code": "string",
+  "handler": "string",
+  "value": "float"
+}
+
 ```
 
-### Use Babel to compile next-gen JS to Node compatible JS.
+Ensure the following:
 
-```
-$ yarn run build
-```
+* There is a paramter for each value returned from every Prometheus query.
+* `name` is required and should not be changed.
+* `value` is required and shold not be changed.
 
-This will compile the src/index.js file into dist/index.js. The dist/ directory
-will be created automatically. Whenever you make changes to the src/index.js
-file you should re-run this command.
-
-
-
+The extension cannot modify or delete existing schemas. If you have an existing schema which needs editing follow instructions [in our documentation](https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-update_schemaUpdateEventSchema)
 
 ## Run Extension
 
