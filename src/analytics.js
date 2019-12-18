@@ -39,6 +39,7 @@ const createSchema = async (settings) => {
 
 const schemaExists = async (settings) => {
   console.log(`[starting] Checking if ${settings.schemaName} schema exists...`)
+
   const response = await fetch(`${settings.analyticsUrl}/events/schema/${settings.schemaName}`, {
     method: 'GET',
     headers: {
@@ -49,8 +50,10 @@ const schemaExists = async (settings) => {
     }
   });
 
-  if(response.status !== 200 || response.status !== 404){
-    const responseJSON = await response.json()
+  const responseJSON = await response.json()
+  if(typeof responseJSON === undefined){
+    responseJSON.statusCode = response.status
+    responseJSON.message = response.statusText
   }
 
   switch (response.status) {
