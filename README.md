@@ -80,7 +80,7 @@ read_local | Choose to read from local data file instead of pulling data from Pr
 prometheus_url | The URL of your Prometheus deployment | `http://localhost:9090`
 appd_analytics_url | URL to connect to the AppD controller events service. See [our documentation](https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-AbouttheAnalyticsEventsAPI) for the URL for your controller. | (blank)
 appd_global_account_name | Account name to connect to the AppD controller See Settings > License > Account for the value for your controller | (blank)
-appd_events_api_key | API Key to connect to AppD controller events service See [our documentation](https://docs.appdynamics.com/display/PRO45/Managing+API+Keys) | (blank)
+appd_events_api_key | API Key to connect to AppD controller events service see [our documentation](https://docs.appdynamics.com/display/PRO45/Managing+API+Keys) to create an API key. | (blank)
 schema_name | Reporting data to analytics requires a schema to be created. Change this value if you are connecting more than one of these extensions to more than one Prometheus deployment | `prometheus_events`
 local_file | The location of the local file used for data when `read_local` is set to `true` | `data/sample.json`
 
@@ -110,6 +110,22 @@ Ensure the following:
 * `value` is required and shold not be changed.
 
 The extension cannot modify or delete existing schemas. If you have an existing schema which needs editing follow instructions [in our documentation](https://docs.appdynamics.com/display/PRO45/Analytics+Events+API#AnalyticsEventsAPI-update_schemaUpdateEventSchema)
+
+### Configure Prometheus Queries
+
+The extension has been designed to run Prometheus queries in series. By default
+the extension will run two sample queries as defined in conf/queries.txt and send the data to AppD as analytics events.
+
+Open conf/queries.txt for editing.
+
+```
+prometheus_target_interval_length_seconds
+prometheus_http_requests_total
+```
+
+The two default queries are listed above. You can add and change these to match the data that you'd like to export from Prometheus to AppD. Each query should be on its own line.
+
+Once you have added your queries you should ensure that your schema config matches the data that Prometheus will return. Failure to do this will cause an error at runtime. 
 
 ## Run Extension
 
